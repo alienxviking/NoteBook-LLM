@@ -1,36 +1,120 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🧠 Google NotebookLM RAG Clone
 
-## Getting Started
+A RAG-powered application inspired by Google NotebookLM — upload any PDF or Text document and have an intelligent conversation with it. Answers are grounded in your document's actual content, not the LLM's general knowledge.
 
-First, run the development server:
+## Submitted By
+- **Name:** Snehangshu Roy
+- **Roll Number:** 24BCS10155
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 🚀 Key Features
+- **Upload** — Drop PDF or Text documents into the app.
+- **Process** — Automatic chunking, embedding, and indexing.
+- **Chat** — Ask natural language questions grounded in the document.
+- **Markdown Support** — Responses are beautifully formatted with bold text, lists, and more.
+- **Clean UI** — A premium, distraction-free interface with smooth animations.
+
+## 🏗️ Architecture
+
+┌──────────────────┐     ┌──────────────────┐     ┌──────────────────┐
+│   Next.js App    │────▶│  API Routes      │────▶│   Qdrant Cloud   │
+│  (React/Tailwind)│◀────│ (Node.js/TS)     │◀────│   Vector DB      │
+└──────────────────┘     └───┬──────────┬───┘     └──────────────────┘
+                             │          │
+                   ┌─────────▼──┐  ┌────▼─────────────────┐
+                   │  Gemini    │  │  Google Gemini       │
+                   │  Flash LLM │  │  Embeddings          │
+                   └────────────┘  └──────────────────────┘
+
+## 🔧 RAG Pipeline — End to End
+
+### 1. Document Ingestion (`src/lib/rag.ts`)
+When a user uploads a document:
+**Upload → Parsing → Chunking → Embedding → Vector Storage**
+
+### 2. Chunking Strategy: `RecursiveCharacterTextSplitter`
+We use `RecursiveCharacterTextSplitter` from LangChain to preserve semantic boundaries.
+- **Chunk Size:** 1000 characters
+- **Chunk Overlap:** 200 characters
+- **Separators:** Priority order: `\n\n`, `\n`, `. `, ` `, ``
+
+### 3. Embedding Model
+- **Model:** `gemini-embedding-001`
+- **Dimensions:** 3072
+- **Provider:** Google Generative AI
+
+### 4. Vector Database: Qdrant Cloud
+- **Collection:** `notebook-llm-docs`
+- **Search:** Cosine similarity for finding relevant chunks.
+- **Auto-Migration:** Automatic collection recreation on dimension mismatch.
+
+### 5. Generation (`src/app/api/chat/route.ts`)
+- **LLM:** `gemini-flash-latest`
+- **Context Grounding:** Strict system prompt ensures the LLM answers ONLY from the provided context.
+- **Formatting:** Responses are rendered using `react-markdown`.
+
+## 🛠️ Tech Stack
+| Component | Technology |
+|-----------|------------|
+| Framework | Next.js 15+ (App Router) |
+| Language  | TypeScript |
+| Styling   | Tailwind CSS + Framer Motion |
+| Embeddings| Google Gemini Embeddings |
+| Vector DB | Qdrant Cloud |
+| LLM       | Google Gemini Flash |
+| Markdown  | react-markdown + remark-gfm |
+
+## 📁 Project Structure
+```
+NoteBook-LLM/
+├── src/
+│   ├── app/
+│   │   ├── api/
+│   │   │   ├── upload/route.ts  # File upload & indexing
+│   │   │   └── chat/route.ts    # RAG Chat logic
+│   │   ├── globals.css          # Design system
+│   │   ├── layout.tsx           # Root layout
+│   │   └── page.tsx             # Interactive UI
+│   ├── lib/
+│   │   └── rag.ts               # Core RAG logic & Qdrant client
+├── .env                         # API Keys (gitignored)
+├── package.json                 # Dependencies
+└── README.md                    # Documentation
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🚀 Local Setup
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Prerequisites
+- Node.js 18+
+- Google AI API key ([ai.google.dev](https://ai.google.dev))
+- Qdrant Cloud account ([cloud.qdrant.io](https://cloud.qdrant.io))
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Steps
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/SnehangshuRoy/NoteBook-LLM.git
+   cd NoteBook-LLM
+   ```
 
-## Learn More
+2. **Install dependencies**
+   ```bash
+   npm install --legacy-peer-deps
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+3. **Configure environment variables**
+   Create a `.env` file in the root:
+   ```env
+   GOOGLE_API_KEY=your_key_here
+   QDRANT_URL=https://your-cluster.cloud.qdrant.io:443
+   QDRANT_API_KEY=your_key_here
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+4. **Start the server**
+   ```bash
+   npm run dev
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+5. **Open in browser**
+   [http://localhost:3000](http://localhost:3000)
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📝 License
+MIT License — Snehangshu Roy
