@@ -15,15 +15,25 @@ A RAG-powered application inspired by Google NotebookLM — upload any PDF or Te
 
 ## 🏗️ Architecture
 
-┌──────────────────┐     ┌──────────────────┐     ┌──────────────────┐
-│   Next.js App    │────▶│  API Routes      │────▶│   Qdrant Cloud   │
-│  (React/Tailwind)│◀────│ (Node.js/TS)     │◀────│   Vector DB      │
-└──────────────────┘     └───┬──────────┬───┘     └──────────────────┘
-                             │          │
-                   ┌─────────▼──┐  ┌────▼─────────────────┐
-                   │  Gemini    │  │  Google Gemini       │
-                   │  Flash LLM │  │  Embeddings          │
-                   └────────────┘  └──────────────────────┘
+```mermaid
+graph TD
+    User([User]) --> Frontend[Next.js Frontend]
+    Frontend --> API[API Routes]
+    API --> Embeddings[Google Gemini Embeddings]
+    API --> VectorDB[(Qdrant Cloud)]
+    API --> LLM[Gemini Flash LLM]
+    
+    subgraph "RAG Pipeline"
+    Embeddings
+    VectorDB
+    LLM
+    end
+```
+
+Alternatively, here is the simplified flow:
+**Frontend** ↔ **API Routes** ↔ **Qdrant (Vector DB)**
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↕
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**Google Gemini AI**
 
 ## 🔧 RAG Pipeline — End to End
 
