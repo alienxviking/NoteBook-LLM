@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { processAndIndexDocument } from "@/lib/rag";
-import { PDFParse } from "pdf-parse";
+
 
 // Polyfill for pdfjs-dist in Node.js environment
 if (typeof (global as any).DOMMatrix === "undefined") {
@@ -29,6 +29,7 @@ export async function POST(req: NextRequest) {
       // Configure worker from local node_modules to satisfy Node.js ESM loader
       const path = await import("path");
       const { pathToFileURL } = await import("url");
+      const { PDFParse } = await import("pdf-parse");
       const workerPath = path.join(process.cwd(), "node_modules", "pdf-parse", "node_modules", "pdfjs-dist", "legacy", "build", "pdf.worker.mjs");
       PDFParse.setWorker(pathToFileURL(workerPath).toString());
       
