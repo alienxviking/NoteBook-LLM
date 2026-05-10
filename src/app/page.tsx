@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Upload, Send, FileText, Bot, User, Loader2, Sparkles, Plus } from "lucide-react";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -184,7 +186,19 @@ export default function NotebookLM() {
                       "p-4 rounded-2xl text-sm leading-relaxed",
                       msg.role === 'user' ? "bg-blue-600 text-white" : "bg-neutral-800 text-neutral-200"
                     )}>
-                      {msg.content}
+                      <ReactMarkdown 
+                        remarkPlugins={[remarkGfm]}
+                        components={{
+                          p: ({node, ...props}) => <p className="mb-2 last:mb-0" {...props} />,
+                          ul: ({node, ...props}) => <ul className="list-disc ml-4 mb-2" {...props} />,
+                          ol: ({node, ...props}) => <ol className="list-decimal ml-4 mb-2" {...props} />,
+                          li: ({node, ...props}) => <li className="mb-1" {...props} />,
+                          code: ({node, ...props}) => <code className="bg-black/30 px-1 rounded text-blue-300" {...props} />,
+                          strong: ({node, ...props}) => <strong className="font-bold text-blue-100" {...props} />,
+                        }}
+                      >
+                        {msg.content}
+                      </ReactMarkdown>
                     </div>
                   </motion.div>
                 ))}
