@@ -94,13 +94,12 @@ export default function NotebookLM() {
       <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-600/20 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-600/20 rounded-full blur-[120px] pointer-events-none" />
 
+
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 p-6 flex justify-between items-center z-50 glass border-none rounded-none bg-black/20">
         <div className="flex items-center gap-2">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg glow">
-            <Sparkles className="text-white w-6 h-6" />
-          </div>
-          <h1 className="text-2xl font-bold gradient-text tracking-tight">NotebookLM</h1>
+
+          <h1 className="text-2xl font-bold tracking-tight">NotebookLM</h1>
         </div>
         {currentFile && (
           <div className="hidden md:flex items-center gap-2 px-4 py-2 glass text-sm text-blue-300">
@@ -124,7 +123,7 @@ export default function NotebookLM() {
               <div className="space-y-4">
                 <h2 className="text-4xl md:text-6xl font-extrabold tracking-tight">
                   Interact with your <br />
-                  <span className="gradient-text">knowledge base</span>
+                  <span className="text-blue-500">knowledge base</span>
                 </h2>
                 <p className="text-neutral-400 text-lg max-w-xl mx-auto">
                   Upload a document and start a conversation. Get grounded answers 

@@ -27,9 +27,7 @@ body {
   }
 
   .gradient-text {
-    background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: var(--foreground);
   }
 
   .gradient-border {
