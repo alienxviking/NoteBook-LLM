@@ -2,6 +2,17 @@ import { NextRequest, NextResponse } from "next/server";
 import { processAndIndexDocument } from "@/lib/rag";
 import { PDFParse } from "pdf-parse";
 
+// Polyfill for pdfjs-dist in Node.js environment
+if (typeof (global as any).DOMMatrix === "undefined") {
+  (global as any).DOMMatrix = class DOMMatrix {};
+}
+if (typeof (global as any).ImageData === "undefined") {
+  (global as any).ImageData = class ImageData {};
+}
+if (typeof (global as any).Path2D === "undefined") {
+  (global as any).Path2D = class Path2D {};
+}
+
 export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
