@@ -1,4 +1,0 @@
-This is a dummy test file for NotebookLM.
-It contains some information about a fictional character named Alex who loves coding and RAG.
-Alex is an AI enthusiast from Berlin.
-He built a NotebookLM clone using Next.js and Qdrant.
